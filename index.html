@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>휴넷 산업안전보건교육</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --yellow: #ffcb03;
+      --yellow-light: #fff3c5;
+      --dark-1: #202b38;
+      --dark-2: #121a24;
+      --dark-text: #292a2d;
+      --white: #ffffff;
+    }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: #0d1117;
+      overflow-x: hidden;
+    }
+
+    /* ─── HERO ─────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      width: 100%;
+      min-height: 820px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 173px;
+      overflow: hidden;
+    }
+
+    /* Background image */
+    .hero__bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+    }
+
+    /* 배경 오버레이 — 중앙 노랑 radial */
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+        ellipse 70% 50% at 50% 40%,
+        rgba(255, 196, 0, 0.08) 0%,
+        transparent 70%
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* 노랑 그라데이션 오버레이 — 상단 warm glow */
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(255, 180, 0, 0.12) 0%,
+        rgba(255, 196, 0, 0.06) 30%,
+        transparent 60%
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ─── DECORATIVE: HELMET (left) ─────────────────────────── */
+    .hero__helmet {
+      position: absolute;
+      left: -302px;
+      top: 151px;
+      width: 659.072px;
+      height: 644.339px;
+      pointer-events: none;
+      z-index: 2;
+      opacity: 0;
+      transform: translateY(50px) scale(0.97);
+      animation: revealHelmet 1.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      animation-delay: 0s;
+    }
+
+    .hero__helmet-img {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 659.072px;
+      height: 644.339px;
+      object-fit: contain;
+      transform: rotate(-52.45deg);
+      transform-origin: center center;
+      opacity: 0.95;
+    }
+
+    /* ─── DECORATIVE: TAPE MEASURE (top-right) ──────────────── */
+    /* 클리핑 래퍼: Figma left:1564px, top:0, w:357px, h:311px (1920×820 기준) */
+    .hero__measure-wrap {
+      position: absolute;
+      left: 81.46%;   /* 1564 / 1920 */
+      top: 0;
+      width: 18.59%;  /* 357 / 1920 */
+      height: 37.93%; /* 311 / 820 */
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 2;
+      opacity: 0;
+      transform: translateY(-30px);
+      animation: revealMeasure 0.8s ease forwards;
+      animation-delay: 0.8s;
+    }
+
+    /* 이미지: hero 기준 left:1640px, top:-164px (래퍼 기준 left:76px, top:-164px) */
+    .hero__measure {
+      position: absolute;
+      left: 76px;    /* 1640 - 1564 */
+      top: -164px;
+      width: 436px;
+      height: 459px;
+      object-fit: contain;
+      opacity: 0.9;
+    }
+
+    /* ─── DECORATIVE: SAFETY TAPES ──────────────────────────── */
+    .hero__tapes {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* 테이프 배경 (고정, 회전만) */
+    .tape {
+      position: absolute;
+      width: 5000px;
+      padding: 30px 0;
+      background: var(--yellow);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+    }
+
+    /* 텍스트 트랙 (스크롤) — gap 대신 padding-right 사용해야 -50% 루프가 정확히 맞음 */
+    .tape__track {
+      display: flex;
+      align-items: center;
+      width: max-content;
+      white-space: nowrap;
+      font-family: 'Helvetica', 'Arial', sans-serif;
+      font-weight: 700;
+      font-size: clamp(16px, 1.4vw, 24px);
+      letter-spacing: -1.2px;
+      color: var(--dark-text);
+      animation: marquee 30s linear infinite;
+    }
+
+    /* 각 아이템 오른쪽 여백 포함 — 마지막 아이템도 동일한 간격 유지 */
+    .tape__track span {
+      padding-right: 70px;
+    }
+
+    /* Tape 1: center at (1487px, 748px) in 1920×820 → 77.4%, 91.2% */
+    .tape--1 {
+      left: 77.4%;
+      top: 91.2%;
+      transform: translate(-50%, -50%) rotate(-20deg);
+    }
+
+    /* Tape 2: center at (1630px, 726px) in 1920×820 → 84.9%, 88.5% */
+    .tape--2 {
+      left: 84.9%;
+      top: 88.5%;
+      transform: translate(-50%, -50%) rotate(-45.94deg);
+    }
+
+    .tape--2 .tape__track {
+      animation-delay: -3s;
+    }
+
+    /* ─── MAIN CONTENT ──────────────────────────────────────── */
+    .hero__content {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      text-align: center;
+      padding: 0 20px;
+      max-width: 1000px;
+      width: 100%;
+    }
+
+    /* Text group */
+    .hero__text-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hero__sub-title {
+      width: 577px;
+      height: auto;
+      display: block;
+    }
+
+    .hero__title {
+      font-size: 92px;
+      font-weight: 800;
+      color: var(--yellow);
+      line-height: 1.4;
+      text-shadow: 0 8px 24px rgba(255, 196, 0, 0.16);
+    }
+
+    .hero__desc {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--white);
+      letter-spacing: -0.7px;
+      line-height: 1.6;
+    }
+
+    /* ─── CTA BUTTON ─────────────────────────────────────────── */
+    .hero__cta {
+      position: relative;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 20px clamp(30px, 4vw, 50px);
+      margin-top: 50px; /* desc~버튼 Figma 간격 70px (gap 20px + margin 50px) */
+      border: 2px solid var(--yellow);
+      border-radius: 900px;
+      width: clamp(280px, 30vw, 400px);
+      cursor: pointer;
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      text-decoration: none;
+    }
+
+    .hero__cta::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(to bottom, var(--dark-1), var(--dark-2));
+      box-shadow: inset 0 1px 4px rgba(255, 255, 255, 0.06);
+      pointer-events: none;
+    }
+
+    .hero__cta::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -30%;
+      width: 30%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.14),
+        transparent
+      );
+      transform: skewX(-20deg);
+      transition: left 0.6s ease;
+      z-index: 1;
+    }
+
+    .hero__cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(255, 203, 3, 0.2);
+    }
+
+    .hero__cta:hover::after {
+      left: 110%;
+    }
+
+    .hero__cta-label {
+      position: relative;
+      font-size: clamp(13px, 1vw, 16px);
+      font-weight: 500;
+      color: var(--white);
+      letter-spacing: -0.5px;
+      line-height: 1.6;
+    }
+
+    .hero__cta-action {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .hero__cta-text {
+      font-size: clamp(18px, 1.6vw, 24px);
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1.4;
+      white-space: nowrap;
+    }
+
+    .hero__cta-arrow {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+    }
+
+    /* ─── ANIMATIONS ─────────────────────────────────────────── */
+    @keyframes glowPulse {
+      0%, 100% { text-shadow: 0px 8px 30px rgba(255, 196, 0, 0.2); }
+      50%       { text-shadow: 0px 8px 30px rgba(255, 196, 0, 0.35); }
+    }
+
+    /* 텍스트 절반(-50%) 이동 후 원위치 → 끊김 없는 루프 */
+    @keyframes marquee {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* 등장 애니메이션 */
+    .hero__text-group,
+    .hero__desc,
+    .hero__cta {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: revealUp 0.8s ease forwards;
+    }
+
+    .hero__desc {
+      animation-delay: 0.15s;
+    }
+
+    .hero__cta {
+      animation-delay: 0.3s;
+    }
+
+    @keyframes revealUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes revealHelmet {
+      to {
+        opacity: 0.95;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes revealMeasure {
+      to {
+        opacity: 0.9;
+        transform: translateY(0);
+      }
+    }
+
+    /* ─── RESPONSIVE ─────────────────────────────────────────── */
+
+    /* Tablet */
+    @media (max-width: 1024px) {
+      .hero {
+        min-height: 680px;
+      }
+
+      .hero__helmet {
+        left: -220px;
+        top: 120px;
+        width: 500px;
+        height: 490px;
+      }
+
+      .hero__helmet-img {
+        width: 500px;
+        height: 490px;
+      }
+
+      .hero__measure-wrap {
+        width: 22%;
+        height: 40%;
+      }
+
+      .tape--2 {
+        right: -300px;
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .hero {
+        min-height: 100svh;
+        align-items: flex-start;
+        padding-top: 80px;
+      }
+
+      .hero__helmet {
+        left: -160px;
+        top: auto;
+        bottom: -60px;
+        width: 340px;
+        height: 334px;
+        opacity: 0.6;
+      }
+
+      .hero__helmet-img {
+        width: 340px;
+        height: 334px;
+      }
+
+      .hero__measure-wrap {
+        width: 25%;
+        height: 35%;
+      }
+
+      .tape--2 {
+        display: none;
+      }
+
+      .tape--1 {
+        font-size: 14px;
+        padding: 12px 30px;
+        gap: 40px;
+        bottom: 60px;
+      }
+
+      .hero__content {
+        gap: 16px;
+        padding: 0 16px;
+        max-width: 100%;
+      }
+
+      .hero__title {
+        font-size: clamp(32px, 8vw, 60px);
+      }
+
+      .hero__desc {
+        font-size: 18px;
+      }
+
+      .hero__cta {
+        width: clamp(240px, 80vw, 340px);
+        padding: 16px 30px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero__helmet {
+        opacity: 0.35;
+      }
+
+      .hero__sub-title {
+        max-width: clamp(220px, 75vw, 420px);
+      }
+    }
+  </style>
+</head>
+<body>
+
+<section class="hero">
+  <!-- Background -->
+  <img
+    class="hero__bg"
+    src="img/bg.png"
+    alt=""
+    aria-hidden="true"
+  />
+
+  <!-- Helmet (left decorative) -->
+  <div class="hero__helmet" aria-hidden="true">
+    <img
+      class="hero__helmet-img"
+      src="https://www.figma.com/api/mcp/asset/b0083a94-e939-45cf-959f-64d0fa210524"
+      alt=""
+    />
+  </div>
+
+  <!-- Tape measure (top-right decorative) -->
+  <div class="hero__measure-wrap" aria-hidden="true">
+    <img
+      class="hero__measure"
+      src="https://www.figma.com/api/mcp/asset/bc0f26ad-4b41-4b31-871a-0351d3ff54f6"
+      alt=""
+    />
+  </div>
+
+  <!-- Safety tape ribbons -->
+  <div class="hero__tapes" aria-hidden="true">
+    <div class="tape tape--1">
+      <div class="tape__track">
+        <span>CONSTRUCTION SAFETY</span><span>CONSTRUCTION SAFETY</span>
+        <span>CONSTRUCTION SAFETY</span><span>CONSTRUCTION SAFETY</span>
+        <span>CONSTRUCTION SAFETY</span><span>CONSTRUCTION SAFETY</span>
+        <span>CONSTRUCTION SAFETY</span><span>CONSTRUCTION SAFETY</span>
+        <span>CONSTRUCTION SAFETY</span><span>CONSTRUCTION SAFETY</span>
+        <!-- 아래는 위와 동일한 복제본 — -50% 루프 기준점 -->
+        <span>CONSTRUCTION SAFETY</span><span>CONSTRUCTION SAFETY</span>
+        <span>CONSTRUCTION SAFETY</span><span>CONSTRUCTION SAFETY</span>
+        <span>CONSTRUCTION SAFETY</span><span>CONSTRUCTION SAFETY</span>
+        <span>CONSTRUCTION SAFETY</span><span>CONSTRUCTION SAFETY</span>
+        <span>CONSTRUCTION SAFETY</span><span>CONSTRUCTION SAFETY</span>
+      </div>
+    </div>
+    <div class="tape tape--2">
+      <div class="tape__track">
+        <span>CONSTRUCTION SAFETY</span><span>CONSTRUCTION SAFETY</span>
+        <span>CONSTRUCTION SAFETY</span><span>CONSTRUCTION SAFETY</span>
+        <span>CONSTRUCTION SAFETY</span><span>CONSTRUCTION SAFETY</span>
+        <span>CONSTRUCTION SAFETY</span><span>CONSTRUCTION SAFETY</span>
+        <span>CONSTRUCTION SAFETY</span><span>CONSTRUCTION SAFETY</span>
+        <!-- 복제본 -->
+        <span>CONSTRUCTION SAFETY</span><span>CONSTRUCTION SAFETY</span>
+        <span>CONSTRUCTION SAFETY</span><span>CONSTRUCTION SAFETY</span>
+        <span>CONSTRUCTION SAFETY</span><span>CONSTRUCTION SAFETY</span>
+        <span>CONSTRUCTION SAFETY</span><span>CONSTRUCTION SAFETY</span>
+        <span>CONSTRUCTION SAFETY</span><span>CONSTRUCTION SAFETY</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main content -->
+  <div class="hero__content">
+    <div class="hero__text-group">
+      <img class="hero__sub-title" src="img/text1.png" alt="법은 바뀌어도 휴넷은 변함없는 정답입니다!" />
+      <h1 class="hero__title">휴넷 산업안전보건교육</h1>
+    </div>
+    <p class="hero__desc">과태료 걱정 없는 완벽한 파트너</p>
+
+    <a href="#" class="hero__cta">
+      <span class="hero__cta-label">고용노동부 공식 위탁기관</span>
+      <div class="hero__cta-action">
+        <span class="hero__cta-text">휴넷기업교육에 문의하기</span>
+        <img class="hero__cta-arrow" src="img/arrow-right.svg" alt="→" />
+      </div>
+    </a>
+  </div>
+</section>
+
+</body>
+</html>
